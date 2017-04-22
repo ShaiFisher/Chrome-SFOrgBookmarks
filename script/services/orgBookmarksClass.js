@@ -119,6 +119,10 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 			if (!group.createdDate) {
 				group.createdDate = new Date();
 			}
+			// load bookmarks functions
+			for (var i=0; i<group.bookmarks.length; i++) {
+				group.bookmarks[i] = new Bookmark(group.bookmarks[i]);
+			}
 		});
 
 		// arrange old bookmarks into default group

@@ -4,22 +4,19 @@ sfobApp.factory('Bookmark',['$q', 'utils', function($q, utils) {
 		title: '',
 		url: '',
 		createdDate: '',
-		modifiedDate: '',
+		//modifiedDate: '',		// what for?
 		lastUseDate: ''
 	};
 
 	return function(bookmark, title, url) {
-		bookmarkObj = bookmark;
-		if (!bookmark) {
-			bookmarkObj = {
-				title: title,
-				url: url,
-				createdDate: new Date(),
-				modifiedDate: new Date(),
-				lastUseDate: new Date()
-			};
-		}
+		bookmarkObj = bookmark || {
+			title: title,
+			url: url
+		};
+		bookmarkObj.createdDate = new Date(bookmarkObj.createdDate);
+		bookmarkObj.lastUseDate = new Date(bookmarkObj.lastUseDate);
 
+		//console.log('new bookmark:', bookmarkObj);
 
 		return bookmarkObj;
 	};
