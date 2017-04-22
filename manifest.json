@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Salesforce Org Bookmarks",
+  "description": "Displays bookmarks related to this org",
+  "version": "1.0",
+
+  "browser_action": {
+   "default_icon": "sforgbkmrk.png",
+   "default_popup": "bookmarksbar.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*.salesforce.com/*", "https://*.salesforce.com/*", "https://*.force.com/*"],
+      "js": ["contentscript.js"],
+      "all_frames": true
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+   ],
+
+  "web_accessible_resources" : ["getorg.js"]
+}

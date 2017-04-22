@@ -1,0 +1,62 @@
+
+span {
+	display: inline-block;
+}
+
+.popup-wrap {
+	min-width: 350px;
+	max-width: 400px;
+}
+
+h2 {
+	display: inline;
+}
+
+.action-bar {
+	display: none;
+    float: right;
+}
+
+.action-bar-parent:hover .action-bar {
+	display: inline-block;
+}
+
+
+.bookmarks-list .icon {
+	float: right;
+}
+
+.icon {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+
+}
+
+.icon-wrap {
+	display: inline-block;
+}
+
+.icon-wrap .icon {
+	display: block;
+}
+
+.icon-delete {
+	background: url(./images/icon_delete.png) center center no-repeat;
+}
+
+.icon-add {
+	background: url(./images/icon_add.png) center center no-repeat;
+}
+
+.icon-edit {
+	background: url(./images/icon_edit.png) center center no-repeat;
+}
+
+.icon-up {
+	background: url(./images/icon_up.gif) center center no-repeat;
+}
+
+.icon-down {
+	background: url(./images/icon_down.gif) center center no-repeat;
+}
