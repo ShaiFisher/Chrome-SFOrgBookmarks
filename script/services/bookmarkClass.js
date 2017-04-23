@@ -17,7 +17,6 @@ sfobApp.factory('Bookmark',['$q', 'utils', function($q, utils) {
 		bookmarkObj.lastUseDate = new Date(bookmarkObj.lastUseDate);
 
 		//console.log('new bookmark:', bookmarkObj);
-
 		return bookmarkObj;
 	};
 }]);

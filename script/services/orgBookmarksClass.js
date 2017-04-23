@@ -17,13 +17,6 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 		bookmarks: [],	- deprecated
 		*/
 
-		toDataOnly: function() {
-			return {
-				orgId: this.orgId,
-				name: this.orgId
-			};
-		},
-
 		addGroup: function(name) {
 			var newGroup = {
 				name: name || NEW_GROUP,
@@ -87,6 +80,16 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	    moveBookmarkToGroup(bookmark, oldGroup, newGroup) {
 	    	newGroup.bookmarks.push(bookmark);
 	    	this.deleteBookmark(oldGroup, bookmark);
+	    },
+
+	    getAllBookamrks: function() {
+	    	var bookmarks = [];
+	    	angular.forEach(this.groups, function(group) {
+	    		angular.forEach(group.bookmarks, function(bookmark) {
+	    			bookmarks.push(bookmark);
+	    		});
+	    	});
+	    	return bookmark;
 	    },
 	};
 

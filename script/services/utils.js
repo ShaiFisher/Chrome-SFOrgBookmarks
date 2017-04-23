@@ -1,5 +1,6 @@
 sfobApp.factory('utils',['$q', function($q) {
 
+	const DAY_MILISECONDS = 24*60*60*1000;
 
 	var logHandlers = [];
 
@@ -36,6 +37,15 @@ sfobApp.factory('utils',['$q', function($q) {
 				}
 			});
 			return newArray;
+		},
+
+		daysBetween: function(date1, date2) {
+			return Math.round(Math.abs((date1.getTime() - date2.getTime())/(DAY_MILISECONDS))); 
+		},
+
+		daysUntillNow: function(date) {
+			var now = new Date();
+			return this.daysBetween(date, now);
 		},
 
 		/*getValues: function(array, field) {

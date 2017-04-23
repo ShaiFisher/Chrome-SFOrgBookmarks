@@ -41,7 +41,7 @@
 
 	    		<ul class="bookmarks-list">
 			    	<li class="action-bar-parent" ng-repeat="bookmark in group.bookmarks track by bookmark.createdDate">
-			    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openUrl(bookmark.url)"></a>
+			    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openUrl(bookmark.url)" style="opacity: {{bookmark.opacity}}"></a>
 			    		<div class="action-bar">
 				    		<span class="icon icon-edit" ng-click="editMode = !editMode"></span>
 				    		<span class="icon icon-delete" ng-click="deleteBookmark(group, bookmark)"></span>
