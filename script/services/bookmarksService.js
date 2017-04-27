@@ -1,20 +1,9 @@
-sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', function($q, utils, OrgBookmarks) {
+sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageService', 
+			function($q, utils, OrgBookmarks, storageService) {
 
 	const ORGS_LIST_KEY = 'orglist';
+	const LAST_ORG_ID_KEY = 'lastOrgId';
 
-	var bookmarksMock = {
-		orgId: 'test',
-		orgName: 'Test Org',
-		bookmarks: [
-			{name: 'bookmark1', url: 'url1'},
-			{name: 'bookmark2', url: 'url2'},
-			{name: 'bookmark3', url: 'url3'}
-		]
-	};
-
-	var promises = {
-	};
-	var orgsList = null;
 
 	function getKey(orgId) {
 		return 'orgInfo_' + orgId;
@@ -33,6 +22,11 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', function($q, 
 		},
 
         getBookmarks: function(orgId) {
+        	console.log('getBookmarks:', orgId);
+
+        	// add orgId to global orgs ids list
+        	this.addToOrgsList(orgId);
+
         	var deferred = $q.defer();
     		var key = getKey(orgId);
     	 	chrome.storage.sync.get(key, function(result) {
@@ -60,15 +54,16 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', function($q, 
 			});
 		},
 
-		loadOrgsList: function() {
-			this.loadFromStorage(ORGS_LIST_KEY, function(result) {
-	    		//utils.log('orgs list:', ORGS_LIST_KEY, result[ORGS_LIST_KEY]);
-	    		orgInfo = result[ORGS_LIST_KEY] || {};
-    		});
+		addToOrgsList: function(orgId) {
+			storageService.load(ORGS_LIST_KEY).then(function(orgsList) {
+				console.log('loaded orgsList:', orgsList);
+				orgsList = orgsList || [];
+				if (orgsList.indexOf(orgId) == -1) {
+					orgsList.push(orgId);
+					storageService.save(ORGS_LIST_KEY, orgsList);
+				}
+			});
 		},
 
-		updateOrgsList: function() {
-			this.saveToStorage(ORGS_LIST_KEY, orgsList);
-		},
 	};
 }]);

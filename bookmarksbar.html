@@ -10,6 +10,7 @@
 	<script src="./script/services/bookmarkClass.js"></script>
 	<script src="./script/services/orgBookmarksClass.js"></script>
 	<script src="./script/services/bookmarksService.js"></script>
+	<script src="./script/services/storageService.js"></script>
 	<script src="./script/services/windowService.js"></script>
 	<script src="./script/services/utils.js"></script>
 
@@ -32,6 +33,7 @@
 		    		<h2 ng-bind="group.name" ng-hide="group.editMode"></h2>
 		    		<input type="text" ng-model="group.name" ng-show="group.editMode" ng-blur="group.editMode = false; saveChanges()">
 		    		<div class="action-bar">
+		    			<span class="icon icon-add" ng-click="addBookmark(group)"></span>
 			    		<span class="icon icon-edit" ng-click="group.editMode = !group.editMode"></span>
 			    		<span class="icon icon-delete" ng-click="deleteGroup($index)"></span>
 			    		<span class="icon icon-up" ng-click="moveBookmark($index, -1)"></span>
@@ -40,8 +42,8 @@
 		    	</div>
 
 	    		<ul class="bookmarks-list">
-			    	<li class="action-bar-parent" ng-repeat="bookmark in group.bookmarks track by bookmark.createdDate">
-			    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openUrl(bookmark.url)" style="opacity: {{bookmark.opacity}}"></a>
+			    	<li class="action-bar-parent" ng-repeat="bookmark in group.bookmarks">
+			    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openBookmark(bookmark)" style="opacity: {{bookmark.opacity}}"></a>
 			    		<div class="action-bar">
 				    		<span class="icon icon-edit" ng-click="editMode = !editMode"></span>
 				    		<span class="icon icon-delete" ng-click="deleteBookmark(group, bookmark)"></span>

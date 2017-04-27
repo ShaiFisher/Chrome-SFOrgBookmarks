@@ -9,13 +9,15 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     windowService.getOrgId().then(function(orgId) {
         //console.log('got orgId from service:', orgId);
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
-            //console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
+            console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
             $scope.orgBookmarks = orgBookmarks;
 
             // set opacity
-            angular.forEach($scope.orgBookmarks.getAllBookmarks(), function(bookmark) {
+            angular.forEach(orgBookmarks.getAllBookmarks(), function(bookmark) {
+                //console.log('lastUseDate:', bookmark.lastUseDate);
                 var dayswithoutUse = Math.min(utils.daysUntillNow(bookmark.lastUseDate), BOOKMARK_OLDNESS_MAX);
-                bookmark.opacity = dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
+                bookmark.opacity = 1 - dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
+                //console.log('opacity:', dayswithoutUse, '/', BOOKMARK_OPACITY_FACTOR, '=', bookmark.opacity);
             });
             
         });
@@ -32,7 +34,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
 
     //--------------- Bookmarks methods ----------------------
 
-    $scope.addBookmark = function() {
+    $scope.addBookmark = function(group) {
         windowService.getActiveTab().then(function(tab) {
             //utils.log('current tab:', tab);
 
@@ -40,7 +42,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
             var i = tab.title.indexOf(' ~ ');
             var title = (i > 0 ? tab.title.substring(0, i) : tab.title);
 
-            $scope.orgBookmarks.addBookmark(title, tab.url);
+            $scope.orgBookmarks.addBookmark(title, tab.url, group);
             $scope.saveChanges();
             //$scope.$digest();
         });
@@ -60,8 +62,10 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         }
     };
 
-    $scope.openUrl = function(url) {
-        windowService.navigateTo(url);
+    $scope.openBookmark = function(bookmark) {
+        //console.log('openBookmark:', bookmark);
+        bookmark.open();
+        $scope.saveChanges();
     };
 
 

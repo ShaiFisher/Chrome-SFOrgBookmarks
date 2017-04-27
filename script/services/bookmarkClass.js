@@ -1,4 +1,4 @@
-sfobApp.factory('Bookmark',['$q', 'utils', function($q, utils) {
+sfobApp.factory('Bookmark',['$q', 'utils', 'windowService', function($q, utils, windowService) {
 
 	var bookmarkObj = {
 		title: '',
@@ -13,10 +13,15 @@ sfobApp.factory('Bookmark',['$q', 'utils', function($q, utils) {
 			title: title,
 			url: url
 		};
-		bookmarkObj.createdDate = new Date(bookmarkObj.createdDate);
-		bookmarkObj.lastUseDate = new Date(bookmarkObj.lastUseDate);
+		bookmarkObj.createdDate = (bookmarkObj.createdDate ? new Date(bookmarkObj.createdDate) : new Date());
+		bookmarkObj.lastUseDate = (bookmarkObj.lastUseDate ? new Date(bookmarkObj.lastUseDate) : new Date());
 
-		//console.log('new bookmark:', bookmarkObj);
+		bookmarkObj.open = function() {
+			bookmark.lastUseDate = new Date();
+			windowService.navigateTo(this.url);
+		};
+
+		console.log('new bookmark:', bookmarkObj);
 		return bookmarkObj;
 	};
 }]);

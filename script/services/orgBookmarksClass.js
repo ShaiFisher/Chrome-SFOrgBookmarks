@@ -59,10 +59,10 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 			return group.bookmarks.indexOf(bookmark);
 		},
 
-		addBookmark: function(title, url) {
+		addBookmark: function(title, url, group) {
 			var bookmark = new Bookmark(null, title, url);
-			var defaultGroup = this.getDefaultGroup();
-			defaultGroup.bookmarks.push(bookmark);
+			group = group || this.getDefaultGroup();
+			group.bookmarks.push(bookmark);
 		},
 
 		deleteBookmark: function(group, bookmark) {
@@ -82,14 +82,14 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	    	this.deleteBookmark(oldGroup, bookmark);
 	    },
 
-	    getAllBookamrks: function() {
+	    getAllBookmarks: function() {
 	    	var bookmarks = [];
 	    	angular.forEach(this.groups, function(group) {
 	    		angular.forEach(group.bookmarks, function(bookmark) {
 	    			bookmarks.push(bookmark);
 	    		});
 	    	});
-	    	return bookmark;
+	    	return bookmarks;
 	    },
 	};
 
@@ -115,8 +115,7 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 		// clean groups and bookmarks
 		orgBookmarks.groups = utils.removeEmptyItems(orgBookmarks.groups);
 
-		// set groups map
-		//orgBookmarks.groupsMap = {};
+		// complete data of groups and bookmarks
 		angular.forEach(orgBookmarks.groups, function(group) {
 			//orgBookmarks.groupsMap[group.name] = group;
 			if (!group.createdDate) {

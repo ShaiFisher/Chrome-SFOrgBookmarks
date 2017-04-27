@@ -1,5 +1,6 @@
-sfobApp.factory('windowService',['$q', 'utils', function($q, utils) {
+sfobApp.factory('windowService',['$q', 'utils', 'storageService', function($q, utils, storageService) {
 
+	const LAST_ORG_ID_KEY = 'lastOrgId';
 
 	return {
 
@@ -29,8 +30,23 @@ sfobApp.factory('windowService',['$q', 'utils', function($q, utils) {
 			var deferred = $q.defer();
 			this.getActiveTabId().then(function(tabId) {
 				chrome.tabs.sendMessage(tabId, "getOrgId", function(orgId) {
-	                //console.log('response:', orgId);
-	                deferred.resolve(orgId);
+	                //console.log('getOrgId response:', orgId);
+	                if (orgId) {
+	                	// store as last org id
+	                	storageService.save(LAST_ORG_ID_KEY, orgId);
+	                	//console.log('last org id saved');
+
+	                	// return org id
+	                	deferred.resolve(orgId);
+	                } else {
+	                	// retrieve last org id
+	                	storageService.load(LAST_ORG_ID_KEY).then(function(lastOrgId) {
+	                		//console.log('last org id:', lastOrgId);
+	                		deferred.resolve(lastOrgId);
+	                	});
+	                }
+	                
+	                
 	            });
 			})
 	        return deferred.promise;
