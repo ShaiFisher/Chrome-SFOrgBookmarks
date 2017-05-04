@@ -2,14 +2,14 @@
 sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 'utils', 'OrgBookmarks',
                             function($scope, bookmarksService, windowService, utils, OrgBookmarks) {
 
-    const BOOKMARK_OPACITY_MAX = 0.8;
+    const BOOKMARK_OPACITY_MAX = 0.6;
     const BOOKMARK_OLDNESS_MAX = 60;
     const BOOKMARK_OPACITY_FACTOR = BOOKMARK_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
 
     windowService.getOrgId().then(function(orgId) {
         //console.log('got orgId from service:', orgId);
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
-            console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
+            //console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
             $scope.orgBookmarks = orgBookmarks;
 
             // set opacity
@@ -61,6 +61,13 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
             $scope.saveChanges();
         }
     };
+
+    $scope.shiftGroup = function(group, shift) {
+        var success = $scope.orgBookmarks.shiftGroup(group, shift);
+        if (success) {
+            $scope.saveChanges();
+        }
+    },
 
     $scope.openBookmark = function(bookmark) {
         //console.log('openBookmark:', bookmark);

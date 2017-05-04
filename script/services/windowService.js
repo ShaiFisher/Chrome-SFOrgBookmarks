@@ -39,6 +39,7 @@ sfobApp.factory('windowService',['$q', 'utils', 'storageService', function($q, u
 	                	// return org id
 	                	deferred.resolve(orgId);
 	                } else {
+	                	//deferred.reject('Unknown org Id');
 	                	// retrieve last org id
 	                	storageService.load(LAST_ORG_ID_KEY).then(function(lastOrgId) {
 	                		//console.log('last org id:', lastOrgId);

@@ -11,9 +11,11 @@ sfobApp.directive('bookmarkEditForm', ['$interval', '$timeout', function($interv
 	    	'<div class="bookmark-edit-form-wrap">' +
 		    	'<input type="text" ng-model="bookmark.title"/>' +
 		    	'<input type="text" ng-model="bookmark.url"/>' +
-		    	'<select ng-model="selectedGroup" ' + 
-		    			'ng-options="group.name for group in groups" ' + 
-		    			'ng-change="moveToGroup(selectedGroup)"></select>' +
+		    	'<div>' +
+			    	'<select ng-model="selectedGroup" ' + 
+			    			'ng-options="group.name for group in groups" ' + 
+			    			'ng-change="moveToGroup(selectedGroup)"></select>' +
+			    '</div>' +
 	        '</div>',
 
 	    link: function (scope, element, attrs) {  

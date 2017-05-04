@@ -49,6 +49,12 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 			return defaultGroup;
 		},
 
+		shiftGroup: function(group, shift) {
+			var index = this.groups.indexOf(group);
+	        var success = utils.switchItems(this.groups, index, index + shift);
+	        return success;
+	    },
+
 		/*getGroupsNames: function() {
 			return utils.getValues(this.groups, 'name');
 		},*/
@@ -77,7 +83,7 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	        return success;
 	    },
 
-	    moveBookmarkToGroup(bookmark, oldGroup, newGroup) {
+	    moveBookmarkToGroup: function(bookmark, oldGroup, newGroup) {
 	    	newGroup.bookmarks.push(bookmark);
 	    	this.deleteBookmark(oldGroup, bookmark);
 	    },

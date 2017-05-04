@@ -22,7 +22,7 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		},
 
         getBookmarks: function(orgId) {
-        	console.log('getBookmarks:', orgId);
+        	//console.log('getBookmarks:', orgId);
 
         	// add orgId to global orgs ids list
         	this.addToOrgsList(orgId);
@@ -56,7 +56,7 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 
 		addToOrgsList: function(orgId) {
 			storageService.load(ORGS_LIST_KEY).then(function(orgsList) {
-				console.log('loaded orgsList:', orgsList);
+				//console.log('loaded orgsList:', orgsList);
 				orgsList = orgsList || [];
 				if (orgsList.indexOf(orgId) == -1) {
 					orgsList.push(orgId);

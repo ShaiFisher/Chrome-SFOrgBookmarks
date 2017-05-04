@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Salesforce Org Bookmarks",
-  "description": "Displays bookmarks related to this org",
+  "description": "Displays bookmarks related to current SF org",
   "version": "1.0",
 
   "browser_action": {

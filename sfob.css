@@ -12,6 +12,11 @@ h2 {
 	display: inline;
 }
 
+.org-details input {
+	font-size: 14pt;
+	width: 230px;
+}
+
 .action-bar {
 	display: none;
     float: right;
@@ -60,3 +65,41 @@ h2 {
 .icon-down {
 	background: url(./images/icon_down.gif) center center no-repeat;
 }
+
+.groups-list {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+ul.bookmarks-list {
+	list-style-type: none;
+    padding-left: 10px;
+    margin: 7px;
+    margin-bottom: 10px;
+}
+
+ul.bookmarks-list li {
+	margin-bottom: 3px;
+}
+
+ul.bookmarks-list li a {
+	text-decoration: none;
+	color: black;
+	font-size: 12pt;
+}
+
+ul.bookmarks-list li input {
+	width: 250px;
+}
+
+.footer {
+	border-top: 1px gray solid;
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.footer a {
+	text-decoration: none;
+	color: black;
+}
+

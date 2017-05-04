@@ -21,7 +21,7 @@ sfobApp.factory('Bookmark',['$q', 'utils', 'windowService', function($q, utils, 
 			windowService.navigateTo(this.url);
 		};
 
-		console.log('new bookmark:', bookmarkObj);
+		//console.log('new bookmark:', bookmarkObj);
 		return bookmarkObj;
 	};
 }]);
