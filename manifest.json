@@ -3,7 +3,7 @@
 
   "name": "Salesforce Org Bookmarks",
   "description": "Displays bookmarks related to current SF org",
-  "version": "1.0",
+  "version": "1.0.2",
 
   "browser_action": {
    "default_icon": "sforgbkmrk.png",

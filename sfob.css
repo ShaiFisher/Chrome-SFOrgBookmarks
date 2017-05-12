@@ -27,7 +27,7 @@ h2 {
 }
 
 
-.bookmarks-list .icon {
+.bookmarks-list .action-bar .icon {
 	float: right;
 }
 
@@ -64,6 +64,10 @@ h2 {
 
 .icon-down {
 	background: url(./images/icon_down.gif) center center no-repeat;
+}
+
+.icon-ok {
+	background: url(./images/icon_ok.png) center center no-repeat;
 }
 
 .groups-list {

@@ -26,7 +26,8 @@
 	    	<div ng-show="editName || !orgBookmarks.name">
 	    		<h2 ng-bind="orgBookmarks.orgId || 'Unknown Org Id'"></h2>
 		    	<input type="text" ng-model="orgBookmarks.name" placeholder="Org Name">
-		    	<button ng-click="editName = false; saveChanges()">Close</button>
+		    	<span class="icon icon-ok" ng-click="editName = false; saveChanges()"></span>
+		    	<!-- <button ng-click="editName = false; saveChanges()">Close</button> -->
 	    	</div>
 	    </div>
 	    
@@ -34,7 +35,14 @@
 	    	<div ng-repeat="group in orgBookmarks.groups track by group.name">
 	    		<div class="action-bar-parent">
 		    		<h2 ng-bind="group.name" ng-hide="group.editMode"></h2>
-		    		<input type="text" ng-model="group.name" ng-show="group.editMode" ng-blur="group.editMode = false; saveChanges()">
+
+		    		<!-- group edit mode -->
+		    		<span ng-show="group.editMode">
+			    		<input type="text" ng-model="group.name" ng-blur="group.editMode = false; saveChanges()">
+			    		<span class="icon icon-ok" ng-click="group.editMode = false; saveChanges()"></span>
+		    		</span>
+
+		    		<!-- group action icons -->
 		    		<div class="action-bar">
 		    			<span class="icon icon-add" ng-click="addBookmark(group)"></span>
 			    		<span class="icon icon-edit" ng-click="group.editMode = !group.editMode"></span>
@@ -56,7 +64,8 @@
 			    		<bookmark-edit-form ng-if="editMode"
 			    			bookmark="bookmark" group="group" org-bookmarks="orgBookmarks"
 			    			on-close="saveChanges()"></bookmark-edit-form>
-			    		<button ng-show="editMode" ng-click="editMode = false; saveChanges()">Close</button>
+			    		<span ng-show="editMode" class="icon icon-ok" ng-click="editMode = false; saveChanges()"></span>
+			    		<!-- <button ng-show="editMode" ng-click="editMode = false; saveChanges()">Close</button> -->
 			    	</li>
 			    </ul>
 	    	</div>
