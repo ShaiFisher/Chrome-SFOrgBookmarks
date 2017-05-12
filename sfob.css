@@ -12,6 +12,10 @@ h2 {
 	display: inline;
 }
 
+.org-details .org-name {
+	cursor: pointer;
+}
+
 .org-details input {
 	font-size: 14pt;
 	width: 230px;

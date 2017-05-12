@@ -11,6 +11,9 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
             //console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
             $scope.orgBookmarks = orgBookmarks;
+            if (orgBookmarks.orgId && !orgBookmarks.name) {
+                $scope.editOrg = true;
+            }
 
             // set opacity
             angular.forEach(orgBookmarks.getAllBookmarks(), function(bookmark) {

@@ -4,8 +4,8 @@
     <title>SF Org Bookmarks</title>
 	<script id="angularScript" src="./angular.min.js"></script>
 
-	<!-- <script src="./sfob.min.js"></script> -->
-	<script src="./script/app.js"></script>
+	<script src="./sfob.min.js"></script>
+	<!-- <script src="./script/app.js"></script>
 	<script src="./script/controllers/popupCtrl.js"></script>
 	<script src="./script/directives/bookmarkEditForm.js"></script>
 	<script src="./script/services/bookmarkClass.js"></script>
@@ -13,7 +13,7 @@
 	<script src="./script/services/bookmarksService.js"></script>
 	<script src="./script/services/storageService.js"></script>
 	<script src="./script/services/windowService.js"></script>
-	<script src="./script/services/utils.js"></script>
+	<script src="./script/services/utils.js"></script> -->
 
 	<link href="./sfob.css" rel="stylesheet" type="text/css"/> 
 
@@ -21,13 +21,13 @@
   <body ng-controller="popupCtrl">
   	<div class="popup-wrap">
 	  	<div class="org-details">
-	    	<h1 ng-bind="orgBookmarks.name || orgBookmarks.orgId || 'Unknown Org'" ng-hide="editName" 
-	    		ng-click="editName = (orgBookmarks.orgId ? true : false)"></h1>
-	    	<div ng-show="editName || !orgBookmarks.name">
+	    	<h1 class="org-name" ng-bind="orgBookmarks.name || orgBookmarks.orgId || 'Unknown Org'" ng-hide="editOrg" 
+	    		ng-click="editOrg = (orgBookmarks.orgId ? true : false)"></h1>
+	    	<h3 ng-if="!orgBookmarks.orgId">Please login to Salesforce or refresh The page</h3>
+	    	<div ng-show="editOrg">
 	    		<h2 ng-bind="orgBookmarks.orgId || 'Unknown Org Id'"></h2>
 		    	<input type="text" ng-model="orgBookmarks.name" placeholder="Org Name">
-		    	<span class="icon icon-ok" ng-click="editName = false; saveChanges()"></span>
-		    	<!-- <button ng-click="editName = false; saveChanges()">Close</button> -->
+		    	<span class="icon icon-ok" ng-click="editOrg = false; saveChanges()"></span>
 	    	</div>
 	    </div>
 	    
