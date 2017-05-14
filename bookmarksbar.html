@@ -4,8 +4,8 @@
     <title>SF Org Bookmarks</title>
 	<script id="angularScript" src="./angular.min.js"></script>
 
-	<script src="./sfob.min.js"></script>
-	<!-- <script src="./script/app.js"></script>
+	<!-- <script src="./sfob.min.js"></script> -->
+	<script src="./script/app.js"></script>
 	<script src="./script/controllers/popupCtrl.js"></script>
 	<script src="./script/directives/bookmarkEditForm.js"></script>
 	<script src="./script/services/bookmarkClass.js"></script>
@@ -13,91 +13,109 @@
 	<script src="./script/services/bookmarksService.js"></script>
 	<script src="./script/services/storageService.js"></script>
 	<script src="./script/services/windowService.js"></script>
-	<script src="./script/services/utils.js"></script> -->
+	<script src="./script/services/utils.js"></script>
 
 	<link href="./sfob.css" rel="stylesheet" type="text/css"/> 
 
   </head>
   <body ng-controller="popupCtrl">
   	<div class="popup-wrap">
-	  	<div class="org-details">
-	    	<h1 class="org-name" ng-bind="orgBookmarks.name || orgBookmarks.orgId || 'Unknown Org'" ng-hide="editOrg" 
-	    		ng-click="editOrg = (orgBookmarks.orgId ? true : false)"></h1>
-	    	<h3 ng-if="!orgBookmarks.orgId">Please login to Salesforce or refresh The page</h3>
-	    	<div ng-show="editOrg">
-	    		<h2 ng-bind="orgBookmarks.orgId || 'Unknown Org Id'"></h2>
-		    	<input type="text" ng-model="orgBookmarks.name" placeholder="Org Name">
-		    	<span class="icon icon-ok" ng-click="editOrg = false; saveChanges()"></span>
-	    	</div>
-	    </div>
-	    
-	    <div class="groups-list dd">
-	    	<div ng-repeat="group in orgBookmarks.groups track by group.name">
-	    		<div class="action-bar-parent">
-		    		<h2 ng-bind="group.name" ng-hide="group.editMode"></h2>
-
-		    		<!-- group edit mode -->
-		    		<span ng-show="group.editMode">
-			    		<input type="text" ng-model="group.name" ng-blur="group.editMode = false; saveChanges()">
-			    		<span class="icon icon-ok" ng-click="group.editMode = false; saveChanges()"></span>
-		    		</span>
-
-		    		<!-- group action icons -->
-		    		<div class="action-bar">
-		    			<span class="icon icon-add" ng-click="addBookmark(group)"></span>
-			    		<span class="icon icon-edit" ng-click="group.editMode = !group.editMode"></span>
-			    		<span class="icon icon-delete" ng-click="deleteGroup($index)"></span>
-			    		<span class="icon icon-up" ng-click="shiftGroup(group, -1)"></span>
-			    		<span class="icon icon-down" ng-click="shiftGroup(group, 1)"></span>
-			    	</div>
+  		<div class="org-bookmarks" ng-hide="displaySettings">
+		  	<div class="org-details">
+		    	<h1 class="org-name" ng-bind="orgBookmarks.name || orgBookmarks.orgId || 'Unknown Org'" ng-hide="editOrg" 
+		    		ng-click="editOrg = (orgBookmarks.orgId ? true : false)"></h1>
+		    	<h3 ng-if="!orgBookmarks.orgId">Please login to Salesforce or refresh The page</h3>
+		    	<div ng-show="editOrg">
+		    		<h2 ng-bind="orgBookmarks.orgId || 'Unknown Org Id'"></h2>
+			    	<input type="text" ng-model="orgBookmarks.name" placeholder="Org Name">
+			    	<span class="icon icon-ok" ng-click="editOrg = false; saveChanges()"></span>
 		    	</div>
+		    </div>
+		    
+		    <div class="searchBox">
+		    	<input type="text" ng-model="searchText" placeholder="Search" />
+		    </div>
+		    <div class="groups-list">
+		    	<div ng-repeat="group in orgBookmarks.groups track by group.name">
+		    		<div class="action-bar-parent">
+			    		<h2 ng-bind="group.name" ng-hide="group.editMode"></h2>
 
-	    		<ul class="bookmarks-list">
-			    	<li class="action-bar-parent" ng-repeat="bookmark in group.bookmarks">
-			    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openBookmark(bookmark)" style="opacity: {{bookmark.opacity}}"></a>
+			    		<!-- group edit mode -->
+			    		<span ng-show="group.editMode">
+				    		<input type="text" ng-model="group.name" ng-blur="group.editMode = false; saveChanges()">
+				    		<span class="icon icon-ok" ng-click="group.editMode = false; saveChanges()"></span>
+			    		</span>
+
+			    		<!-- group action icons -->
 			    		<div class="action-bar">
-				    		<span class="icon icon-edit" ng-click="editMode = !editMode"></span>
-				    		<span class="icon icon-delete" ng-click="deleteBookmark(group, bookmark)"></span>
-				    		<span class="icon icon-up" ng-click="moveBookmark(group, bookmark, -1)"></span>
-				    		<span class="icon icon-down" ng-click="moveBookmark(group, bookmark, 1)"></span>
-			    		</div>
-			    		<bookmark-edit-form ng-if="editMode"
-			    			bookmark="bookmark" group="group" org-bookmarks="orgBookmarks"
-			    			on-close="saveChanges()"></bookmark-edit-form>
-			    		<span ng-show="editMode" class="icon icon-ok" ng-click="editMode = false; saveChanges()"></span>
-			    		<!-- <button ng-show="editMode" ng-click="editMode = false; saveChanges()">Close</button> -->
-			    	</li>
-			    </ul>
-	    	</div>
-	    </div>
+			    			<span class="icon icon-add" ng-click="addBookmark(group)"></span>
+				    		<span class="icon icon-edit" ng-click="group.editMode = !group.editMode"></span>
+				    		<span class="icon icon-delete" ng-click="deleteGroup($index)"></span>
+				    		<span class="icon icon-up" ng-click="shiftGroup(group, -1)"></span>
+				    		<span class="icon icon-down" ng-click="shiftGroup(group, 1)"></span>
+				    	</div>
+			    	</div>
 
-	    <div>
-	    	<span ng-click="addBookmark()">
-		    	<span class="icon-wrap">
-		    		<span class="icon icon-add"></span>
+		    		<ul class="bookmarks-list">
+				    	<li class="action-bar-parent" ng-repeat="bookmark in group.bookmarks | filter:searchText">
+				    		<a href="{{bookmark.url}}" ng-bind="bookmark.title" ng-hide="editMode" title="{{bookmark.url}}" ng-click="openBookmark(bookmark)" style="opacity: {{bookmark.opacity}}"></a>
+				    		<div class="action-bar">
+					    		<span class="icon icon-edit" ng-click="editMode = !editMode"></span>
+					    		<span class="icon icon-delete" ng-click="deleteBookmark(group, bookmark)"></span>
+					    		<span class="icon icon-up" ng-click="moveBookmark(group, bookmark, -1)"></span>
+					    		<span class="icon icon-down" ng-click="moveBookmark(group, bookmark, 1)"></span>
+				    		</div>
+				    		<bookmark-edit-form ng-if="editMode"
+				    			bookmark="bookmark" group="group" org-bookmarks="orgBookmarks"
+				    			on-close="saveChanges()"></bookmark-edit-form>
+				    		<span ng-show="editMode" class="icon icon-ok" ng-click="editMode = false; saveChanges()"></span>
+				    		<!-- <button ng-show="editMode" ng-click="editMode = false; saveChanges()">Close</button> -->
+				    	</li>
+				    </ul>
+		    	</div>
+		    </div>
+
+		    <div>
+		    	<span ng-click="addBookmark()">
+			    	<span class="icon-wrap">
+			    		<span class="icon icon-add"></span>
+			    	</span>
+			    	<label>Add this page</label>
 		    	</span>
-		    	<label>Add this page</label>
-	    	</span>
-	    </div>
-	    <div>
-	    	<span ng-click="addGroup()">
-		    	<span class="icon-wrap">
-		    		<span class="icon icon-add"></span>
+		    </div>
+		    <div>
+		    	<span ng-click="addGroup()">
+			    	<span class="icon-wrap">
+			    		<span class="icon icon-add"></span>
+			    	</span>
+			    	<label>Create Group</label>
 		    	</span>
-		    	<label>Create Group</label>
-	    	</span>
-	    </div>
-	    <div>
-	    	<span ng-click="deleteAllBookmarks()">
-		    	<span class="icon-wrap">
-		    		<span class="icon icon-delete"></span>
-		    	</span>
-		    	<label>Delete all Org's bookmarks</label>
-		    </span>
+		    </div>
+		    <div>
+		    	<span ng-click="deleteAllBookmarks()">
+			    	<span class="icon-wrap">
+			    		<span class="icon icon-delete"></span>
+			    	</span>
+			    	<label>Delete all Org's bookmarks</label>
+			    </span>
+		    </div>
+		</div>
+
+	    <div class="settings" ng-show="displaySettings">
+	    	<button ng-click="exportBookmarks()">export</button>
+	    	<div class="action-bar" style="display: block;">
+	    		<span class="icon icon-back" ng-click="displaySettings = false"></span>
+	    	</div>
+	    	<textarea ng-model="bookmarksJson"></textarea>
+	    	<button ng-click="importBookmarks()">import</button>
+	    	<input type="checkbox" ng-model="replaceCurrentData"> Replace Current Data
 	    </div>
 
 	    <div class="footer">
 	    	<a href="https://github.com/ShaiFisher/SFOrgBookmarks" target="_blank"><h2>SF Org Bookamrks </h2> 1.0</a>
+	    	<div class="action-bar" style="display: block;">
+	    		<span class="icon icon-settings" ng-click="displaySettings = true"></span>
+	    	</div>
 	    </div>
 	    <!--hr/>
 	    <div>Log:</div>

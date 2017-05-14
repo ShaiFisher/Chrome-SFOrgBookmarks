@@ -19,6 +19,7 @@ h2 {
 .org-details input {
 	font-size: 14pt;
 	width: 230px;
+	margin-bottom: 20px;
 }
 
 .action-bar {
@@ -74,6 +75,14 @@ h2 {
 	background: url(./images/icon_ok.png) center center no-repeat;
 }
 
+.icon-settings {
+	background: url(./images/icon_settings.png) center center no-repeat;
+}
+
+.icon-back {
+	background: url(./images/icon_back.png) center center no-repeat;
+}
+
 .groups-list {
 	max-height: 400px;
 	overflow-y: auto;
@@ -109,5 +118,11 @@ ul.bookmarks-list li input {
 .footer a {
 	text-decoration: none;
 	color: black;
+}
+
+
+.settings textarea {
+	width: 100%;
+	height: 200px;
 }
 

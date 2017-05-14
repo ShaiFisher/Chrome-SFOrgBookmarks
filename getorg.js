@@ -8,7 +8,7 @@ if (typeof SFDCSessionVars != 'undefined') {
 	// insert data to body element
 	var bodyElem = document.getElementsByTagName('body')[0];
 	bodyElem.setAttribute('org-id', orgId);
-	console.log('org-id:', orgId);
+	//console.log('SFOrgBookmarks: org-id:', orgId);
 
 	// send event
 	var evt = new Event('orginfoInjected');

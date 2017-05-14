@@ -29,10 +29,16 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 
         	var deferred = $q.defer();
     		var key = getKey(orgId);
-    	 	chrome.storage.sync.get(key, function(result) {
-	    		//utils.log('load bookmarks:', key, angular.copy(result[key]));
-	    		var orgBookmarks = new OrgBookmarks(result[key], orgId);
-	    		deferred.resolve(orgBookmarks);
+
+    		storageService.load(key).then(function(result) {
+    			// check if sotred as json (new method to fix dates)
+    			if (!angular.isObject(result)) {
+    				//console.log('convert from json');
+    				result = angular.fromJson(result);
+    			}
+    			var orgBookmarks = new OrgBookmarks(result, orgId);
+    			//console.log('orgBookmarks:', orgBookmarks);
+    			deferred.resolve(orgBookmarks);
     		});
 		    return deferred.promise;
 		},
@@ -40,18 +46,10 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		updateBookmarks: function(orgBookmarks) {
 			// strip functions
 			var orgBookmarksJson = angular.toJson(orgBookmarks);
-			var orgBookmarksData = angular.fromJson(orgBookmarksJson);
+			//var orgBookmarksData = angular.fromJson(orgBookmarksJson);
 
 			var key = getKey(orgBookmarks.orgId);
-			var data = {};
-			data[key] = orgBookmarksData;
-			chrome.storage.sync.set(data, function() {
-				//utils.log('saved:', key, orgBookmarksData);
-				// check stored data for testing
-				/*chrome.storage.sync.get(key, function(result) {
-					utils.log('load bookmarks for check:', key, result);
-				});*/
-			});
+			storageService.save(key, orgBookmarksJson);
 		},
 
 		addToOrgsList: function(orgId) {
@@ -63,6 +61,76 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 					storageService.save(ORGS_LIST_KEY, orgsList);
 				}
 			});
+		},
+
+		getAllOrgsKeys: function() {
+			var deferred = $q.defer();
+			storageService.load(ORGS_LIST_KEY).then(function(orgsList) {
+				var orgsKeys = [];
+				angular.forEach(orgsList, function(orgId) {
+					orgsKeys.push(getKey(orgId));
+				});
+				deferred.resolve(orgsKeys);
+			});
+			return deferred.promise;
+		},
+
+		getAllOrgsBookmarks: function() {
+			var deferred = $q.defer();
+			this.getAllOrgsKeys().then(function(orgsKeys) {
+				storageService.loadMultiple(orgsKeys).then(function(allOrgsData) {
+					// convert keys to plain org id
+					var allOrgs = {};
+					angular.forEach(allOrgsData, function(orgData) {
+						// check if sotred as json (new method to fix dates)
+		    			if (!angular.isObject(orgData)) {
+		    				//console.log('convert from json');
+		    				orgData = angular.fromJson(orgData);
+		    			}
+						if (orgData.orgId) {
+							allOrgs[orgData.orgId] = orgData;
+						}
+					});
+					deferred.resolve(allOrgs);
+				});
+			});
+
+			return deferred.promise;
+		},
+
+		removeAllOrgs: function() {
+			this.getAllOrgsKeys().then(function(orgsKeys) {
+				storageService.removeMultiple(orgsKeys);
+				storageService.save(ORGS_LIST_KEY, []);
+			});
+		},
+
+		importOrgsBookmarks: function(orgsData, clearCurrentData) {
+			var deferred = $q.defer();
+			var self = this;
+			this.getAllOrgsKeys().then(function(orgsIdsList) {
+				if (clearCurrentData) {
+					self.removeAllOrgs();
+					orgsIdsList = [];
+				}
+
+				// prepare for save
+				var fixedOrgsData = {};
+				angular.forEach(orgsData, function(orgData) {
+					var key = getKey(orgData.orgId);
+					fixedOrgsData[key] = orgData;
+					orgsIdsList.push(orgData.orgId);
+				});
+
+				// update data
+				$q.all([
+					storageService.saveMultiple(fixedOrgsData),
+					storageService.save(ORGS_LIST_KEY, orgsIdsList)
+				]).then(function() {
+					deferred.resolve();
+				});
+			});
+			return deferred.promise;
 		},
 
 	};

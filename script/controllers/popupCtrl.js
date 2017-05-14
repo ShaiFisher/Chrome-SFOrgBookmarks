@@ -6,8 +6,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     const BOOKMARK_OLDNESS_MAX = 60;
     const BOOKMARK_OPACITY_FACTOR = BOOKMARK_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
 
-    windowService.getOrgId().then(function(orgId) {
-        //console.log('got orgId from service:', orgId);
+    var loadOrgBookmarks = function(orgId) {
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
             //console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
             $scope.orgBookmarks = orgBookmarks;
@@ -22,8 +21,13 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
                 bookmark.opacity = 1 - dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
                 //console.log('opacity:', dayswithoutUse, '/', BOOKMARK_OPACITY_FACTOR, '=', bookmark.opacity);
             });
-            
         });
+    };
+
+    windowService.getOrgId().then(function(orgId) {
+        //console.log('got orgId from service:', orgId);
+        $scope.currentOrgId = orgId;
+        loadOrgBookmarks(orgId);
     });
 
     $scope.saveChanges = function() {
@@ -91,4 +95,26 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         $scope.orgBookmarks.deleteGroup(index);
         $scope.saveChanges();
     };
+
+
+    //----------------- Settings methods ---------------------
+
+    $scope.exportBookmarks = function() {
+        bookmarksService.getAllOrgsBookmarks().then(function(allBookmarks) {
+            console.log('allBookmarks:', allBookmarks);
+            $scope.bookmarksJson = angular.toJson(allBookmarks);
+        });
+    };
+
+    $scope.importBookmarks = function() {
+        var orgsData = angular.fromJson($scope.bookmarksJson);
+        bookmarksService.importOrgsBookmarks(orgsData, $scope.replaceCurrentData).then(function() {
+            console.log('done!');
+            if ($scope.currentOrgId) {
+                loadOrgBookmarks($scope.currentOrgId);
+            }
+        });
+    };
+
+    
 }]);
