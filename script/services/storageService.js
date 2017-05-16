@@ -19,6 +19,7 @@ sfobApp.factory('storageService',['$q', 'utils', function($q, utils) {
 		},
 
 		save: function(key, value) {
+			//console.log('saving', key, value);
 			var deferred = $q.defer();
 			var data = {};
 			data[key] = value;
@@ -29,6 +30,7 @@ sfobApp.factory('storageService',['$q', 'utils', function($q, utils) {
 		},
 
 		saveMultiple: function(dataMap) {
+			//console.log('saveMultiple:', dataMap);
 			var deferred = $q.defer();
 			chrome.storage.sync.set(dataMap, function() {
 				deferred.resolve();

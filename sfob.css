@@ -51,37 +51,15 @@ h2 {
 	display: block;
 }
 
-.icon-delete {
-	background: url(./images/icon_delete.png) center center no-repeat;
-}
-
-.icon-add {
-	background: url(./images/icon_add.png) center center no-repeat;
-}
-
-.icon-edit {
-	background: url(./images/icon_edit.png) center center no-repeat;
-}
-
-.icon-up {
-	background: url(./images/icon_up.gif) center center no-repeat;
-}
-
-.icon-down {
-	background: url(./images/icon_down.gif) center center no-repeat;
-}
-
-.icon-ok {
-	background: url(./images/icon_ok.png) center center no-repeat;
-}
-
-.icon-settings {
-	background: url(./images/icon_settings.png) center center no-repeat;
-}
-
-.icon-back {
-	background: url(./images/icon_back.png) center center no-repeat;
-}
+.icon-delete 	{	background: url(./images/icon_delete.png) center center no-repeat;	}
+.icon-add 		{	background: url(./images/icon_add.png) center center no-repeat;		}
+.icon-edit 		{	background: url(./images/icon_edit.png) center center no-repeat;	}
+.icon-up 		{	background: url(./images/icon_up.gif) center center no-repeat;		}
+.icon-down 		{	background: url(./images/icon_down.gif) center center no-repeat;	}
+.icon-ok 		{	background: url(./images/icon_ok.png) center center no-repeat;		}
+.icon-settings 	{	background: url(./images/icon_settings.png) center center no-repeat;}
+.icon-back 		{	background: url(./images/icon_back.png) center center no-repeat;	}
+.icon-newtab	{	background: url(./images/icon_newtab.png) center center no-repeat;	}
 
 .groups-list {
 	max-height: 400px;
@@ -126,3 +104,6 @@ ul.bookmarks-list li input {
 	height: 200px;
 }
 
+.settings .message {
+	color: red;
+}

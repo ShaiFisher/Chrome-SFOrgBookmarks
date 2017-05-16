@@ -21,6 +21,12 @@ sfobApp.factory('Bookmark',['$q', 'utils', 'windowService', function($q, utils, 
 			windowService.navigateTo(this.url);
 		};
 
+
+		bookmarkObj.openInNewTab = function() {
+			bookmark.lastUseDate = new Date();
+			windowService.openInNewTab(this.url);
+		};
+		
 		//console.log('new bookmark:', bookmarkObj);
 		return bookmarkObj;
 	};

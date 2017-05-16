@@ -11,16 +11,6 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 
 	return {
 
-		loadFromStorage: function(key, callback) {
-			chrome.storage.sync.get(key, callback);
-		},
-
-		saveToStorage: function(key, value, callback) {
-			var data = {};
-			data[key] = value;
-			chrome.storage.sync.set(data, callback);
-		},
-
         getBookmarks: function(orgId) {
         	//console.log('getBookmarks:', orgId);
 
@@ -53,7 +43,8 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		},
 
 		addToOrgsList: function(orgId) {
-			storageService.load(ORGS_LIST_KEY).then(function(orgsList) {
+			//console.log('addToOrgsList:', orgId);
+			this.getAllOrgsIds().then(function(orgsList) {
 				//console.log('loaded orgsList:', orgsList);
 				orgsList = orgsList || [];
 				if (orgsList.indexOf(orgId) == -1) {
@@ -63,9 +54,17 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 			});
 		},
 
+		getAllOrgsIds: function() {
+			var deferred = $q.defer();
+			storageService.load(ORGS_LIST_KEY).then(function(orgsIds) {
+				deferred.resolve(orgsIds);
+			});
+			return deferred.promise;
+		},
+
 		getAllOrgsKeys: function() {
 			var deferred = $q.defer();
-			storageService.load(ORGS_LIST_KEY).then(function(orgsList) {
+			this.getAllOrgsIds().then(function(orgsList) {
 				var orgsKeys = [];
 				angular.forEach(orgsList, function(orgId) {
 					orgsKeys.push(getKey(orgId));
@@ -99,7 +98,7 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		},
 
 		removeAllOrgs: function() {
-			this.getAllOrgsKeys().then(function(orgsKeys) {
+			return this.getAllOrgsKeys().then(function(orgsKeys) {
 				storageService.removeMultiple(orgsKeys);
 				storageService.save(ORGS_LIST_KEY, []);
 			});
@@ -108,28 +107,44 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		importOrgsBookmarks: function(orgsData, clearCurrentData) {
 			var deferred = $q.defer();
 			var self = this;
-			this.getAllOrgsKeys().then(function(orgsIdsList) {
-				if (clearCurrentData) {
-					self.removeAllOrgs();
-					orgsIdsList = [];
-				}
+
+			var importData = function(orgsIdsList) {
+				var numOrgs = 0;
+				var numNewOrgs = 0;
 
 				// prepare for save
 				var fixedOrgsData = {};
 				angular.forEach(orgsData, function(orgData) {
+					numOrgs++;
 					var key = getKey(orgData.orgId);
 					fixedOrgsData[key] = orgData;
-					orgsIdsList.push(orgData.orgId);
+					if (orgsIdsList.indexOf(orgData.orgId) == -1) {
+						numNewOrgs++;
+						orgsIdsList.push(orgData.orgId);
+					}
 				});
 
 				// update data
+				//console.log('updating:', fixedOrgsData, orgsIdsList);
 				$q.all([
 					storageService.saveMultiple(fixedOrgsData),
 					storageService.save(ORGS_LIST_KEY, orgsIdsList)
 				]).then(function() {
-					deferred.resolve();
+					deferred.resolve({numOrgs: numOrgs, numNewOrgs: numNewOrgs});
 				});
-			});
+			};
+
+
+			if (clearCurrentData) {
+				self.removeAllOrgs().then(function() {
+					importData([]);
+				});
+			} else {
+				this.getAllOrgsIds().then(function(orgsIdsList) {
+					importData(orgsIdsList);
+				});
+			}
+
 			return deferred.promise;
 		},
 

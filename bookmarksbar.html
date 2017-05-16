@@ -64,6 +64,7 @@
 					    		<span class="icon icon-delete" ng-click="deleteBookmark(group, bookmark)"></span>
 					    		<span class="icon icon-up" ng-click="moveBookmark(group, bookmark, -1)"></span>
 					    		<span class="icon icon-down" ng-click="moveBookmark(group, bookmark, 1)"></span>
+					    		<span class="icon icon-newtab" ng-click="openBookmark(bookmark, true)"></span>
 				    		</div>
 				    		<bookmark-edit-form ng-if="editMode"
 				    			bookmark="bookmark" group="group" org-bookmarks="orgBookmarks"
@@ -102,17 +103,19 @@
 		</div>
 
 	    <div class="settings" ng-show="displaySettings">
-	    	<button ng-click="exportBookmarks()">export</button>
+	    	<button ng-click="exportBookmarks()">Export</button>
 	    	<div class="action-bar" style="display: block;">
 	    		<span class="icon icon-back" ng-click="displaySettings = false"></span>
 	    	</div>
 	    	<textarea ng-model="bookmarksJson"></textarea>
-	    	<button ng-click="importBookmarks()">import</button>
+	    	<button ng-click="importBookmarks()">Import</button>
 	    	<input type="checkbox" ng-model="replaceCurrentData"> Replace Current Data
+	    	<div class="message" ng-bind="settingsMessage">
+	    	</div>
 	    </div>
 
 	    <div class="footer">
-	    	<a href="https://github.com/ShaiFisher/SFOrgBookmarks" target="_blank"><h2>SF Org Bookamrks </h2> 1.0</a>
+	    	<a href="https://github.com/ShaiFisher/SFOrgBookmarks" target="_blank"><h2>SF Org Bookamrks </h2> 1.1</a>
 	    	<div class="action-bar" style="display: block;">
 	    		<span class="icon icon-settings" ng-click="displaySettings = true"></span>
 	    	</div>

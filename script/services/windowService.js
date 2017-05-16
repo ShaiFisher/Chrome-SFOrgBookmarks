@@ -24,6 +24,11 @@ sfobApp.factory('windowService',['$q', 'utils', 'storageService', function($q, u
 			this.getActiveTab().then(function(tab) {
 				chrome.tabs.update(tab.id, {url: url});
 			});
+			chrome.tabs.create({ url: newURL });
+		},
+
+		openInNewTab: function(url) {
+			chrome.tabs.create({ url: url });
 		},
 
 		getOrgId: function() {

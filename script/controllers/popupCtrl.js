@@ -76,9 +76,13 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         }
     },
 
-    $scope.openBookmark = function(bookmark) {
+    $scope.openBookmark = function(bookmark, inNewTab) {
         //console.log('openBookmark:', bookmark);
-        bookmark.open();
+        if (inNewTab) {
+            bookmark.openInNewTab();
+        } else {
+            bookmark.open();
+        }
         $scope.saveChanges();
     };
 
@@ -101,20 +105,32 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
 
     $scope.exportBookmarks = function() {
         bookmarksService.getAllOrgsBookmarks().then(function(allBookmarks) {
-            console.log('allBookmarks:', allBookmarks);
+            //console.log('allBookmarks:', allBookmarks);
             $scope.bookmarksJson = angular.toJson(allBookmarks);
         });
     };
 
     $scope.importBookmarks = function() {
-        var orgsData = angular.fromJson($scope.bookmarksJson);
-        bookmarksService.importOrgsBookmarks(orgsData, $scope.replaceCurrentData).then(function() {
-            console.log('done!');
-            if ($scope.currentOrgId) {
-                loadOrgBookmarks($scope.currentOrgId);
-            }
-        });
+        try {
+            var orgsData = angular.fromJson($scope.bookmarksJson);
+        } catch(ex) {
+            $scope.settingsMessage = 'Invalid JSON string';
+        }
+        if (orgsData) {
+            bookmarksService.importOrgsBookmarks(orgsData, $scope.replaceCurrentData).then(function(result) {
+                //console.log('done!', result);
+                $scope.settingsMessage = 'Imported ' + result.numOrgs + ' orgs (' + result.numNewOrgs + ' new).';
+                if ($scope.currentOrgId) {
+                    loadOrgBookmarks($scope.currentOrgId);
+                }
+            });
+        }
+        
     };
+
+    $scope.$watch('displaySettings', function(newValue, oldValue) {
+        $scope.settingsMessage = '';
+    });
 
     
 }]);
