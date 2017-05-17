@@ -1,6 +1,6 @@
 
-sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 'utils', 'OrgBookmarks',
-                            function($scope, bookmarksService, windowService, utils, OrgBookmarks) {
+sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 'utils', 'OrgBookmarks', '$timeout',
+                            function($scope, bookmarksService, windowService, utils, OrgBookmarks, $timeout) {
 
     const BOOKMARK_OPACITY_MAX = 0.6;
     const BOOKMARK_OLDNESS_MAX = 60;
@@ -16,10 +16,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
 
             // set opacity
             angular.forEach(orgBookmarks.getAllBookmarks(), function(bookmark) {
-                //console.log('lastUseDate:', bookmark.lastUseDate);
-                var dayswithoutUse = Math.min(utils.daysUntillNow(bookmark.lastUseDate), BOOKMARK_OLDNESS_MAX);
-                bookmark.opacity = 1 - dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
-                //console.log('opacity:', dayswithoutUse, '/', BOOKMARK_OPACITY_FACTOR, '=', bookmark.opacity);
+                setOpacity(bookmark);
             });
         });
     };
@@ -83,7 +80,18 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         } else {
             bookmark.open();
         }
-        $scope.saveChanges();
+        $timeout(function() {
+            setOpacity(bookmark);
+            $scope.saveChanges();
+        }, 500);
+        
+    };
+
+    function setOpacity(bookmark) {
+        //console.log('lastUseDate:', bookmark.lastUseDate, bookmark);
+        var dayswithoutUse = Math.min(utils.daysUntillNow(bookmark.lastUseDate), BOOKMARK_OLDNESS_MAX);
+        bookmark.opacity = 1 - dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
+        //console.log('opacity:', dayswithoutUse, '/', BOOKMARK_OPACITY_FACTOR, '=', bookmark.opacity);
     };
 
 
