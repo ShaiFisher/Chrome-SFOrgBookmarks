@@ -55,6 +55,15 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	        return success;
 	    },
 
+	    isInGroup: function(group, url) {
+	    	for (var i=0; i<group.bookmarks.length; i++) {
+	    		if (group.bookmarks[i].url == url) {
+	    			return true;
+	    		}
+	    	}
+	    	return false;
+	    },
+
 		/*getGroupsNames: function() {
 			return utils.getValues(this.groups, 'name');
 		},*/
@@ -68,7 +77,9 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 		addBookmark: function(title, url, group) {
 			var bookmark = new Bookmark(null, title, url);
 			group = group || this.getDefaultGroup();
-			group.bookmarks.push(bookmark);
+			if (!this.isInGroup(group, url)) {
+				group.bookmarks.push(bookmark);
+			}
 		},
 
 		deleteBookmark: function(group, bookmark) {
@@ -96,6 +107,23 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	    		});
 	    	});
 	    	return bookmarks;
+	    },
+
+	    mergeBookmarks: function(newOrgBookmarks) {
+	    	var self = this;
+	    	var oldGroupsMap = utils.arrayToMap(this.groups, 'name');
+	    	angular.forEach(newOrgBookmarks.groups, function(newGroup) {
+	    		var groupName = newGroup.name;
+	    		var oldGroup = oldGroupsMap[groupName] ;
+	    		if (!oldGroup) {
+	    			self.groups.push(newGroup);
+	    			oldGroupsMap[groupName] = newGroup;
+	    		} else {
+	    			angular.forEach(newGroup.bookmarks, function(bookmark) {
+	    				self.addBookmark(bookmark.title, bookmark.url, oldGroup);
+	    			});
+	    		}
+	    	});
 	    },
 	};
 

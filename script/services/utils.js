@@ -48,6 +48,14 @@ sfobApp.factory('utils',['$q', function($q) {
 			return this.daysBetween(date, now);
 		},
 
+		arrayToMap: function(array, field) {
+			var map = {};
+			angular.forEach(array, function(item) {
+				var key = item[field];
+				map[key] = item;
+			});
+			return map;
+		},
 		/*getValues: function(array, field) {
 			var values = [];
 			angular.forEach(array, function(item) {

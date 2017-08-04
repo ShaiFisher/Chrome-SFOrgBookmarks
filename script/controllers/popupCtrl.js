@@ -46,6 +46,11 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
             var i = tab.title.indexOf(' ~ ');
             var title = (i > 0 ? tab.title.substring(0, i) : tab.title);
 
+            i = title.indexOf(' | ');
+            if (i > -1) {
+                title = title.substring(i + 3);
+            }
+
             $scope.orgBookmarks.addBookmark(title, tab.url, group);
             $scope.saveChanges();
             //$scope.$digest();
@@ -77,6 +82,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         //console.log('openBookmark:', bookmark);
         if (inNewTab) {
             bookmark.openInNewTab();
+            $scope.saveChanges();
         } else {
             bookmark.open();
         }
