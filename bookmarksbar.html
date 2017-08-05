@@ -4,8 +4,8 @@
     <title>SF Org Bookmarks</title>
 	<script id="angularScript" src="./angular.min.js"></script>
 
-	<script src="./sfob.min.js"></script>
-	<!-- <script src="./script/app.js"></script>
+	<!-- <script src="./sfob.min.js"></script> -->
+	<script src="./script/app.js"></script>
 	<script src="./script/controllers/popupCtrl.js"></script>
 	<script src="./script/directives/bookmarkEditForm.js"></script>
 	<script src="./script/services/bookmarkClass.js"></script>
@@ -13,7 +13,7 @@
 	<script src="./script/services/bookmarksService.js"></script>
 	<script src="./script/services/storageService.js"></script>
 	<script src="./script/services/windowService.js"></script>
-	<script src="./script/services/utils.js"></script> -->
+	<script src="./script/services/utils.js"></script>
 
 	<link href="./sfob.css" rel="stylesheet" type="text/css"/> 
 
@@ -115,10 +115,11 @@
 	    </div>
 
 	    <div class="footer">
-	    	<a href="https://github.com/ShaiFisher/SFOrgBookmarks" target="_blank"><h2>SF Org Bookamrks </h2> 1.1</a>
+	    	<a href="https://github.com/ShaiFisher/SFOrgBookmarks" target="_blank"><h2>SF Org Bookamrks </h2> 1.2</a>
 	    	<div class="action-bar" style="display: block;">
 	    		<span class="icon icon-settings" ng-click="displaySettings = true"></span>
 	    	</div>
+	    	<div ng-show="displayLastExportWarning" style="color: red;"> Days from last export: {{daysFromLastExport}}</div>
 	    </div>
 	    <!--hr/>
 	    <div>Log:</div>

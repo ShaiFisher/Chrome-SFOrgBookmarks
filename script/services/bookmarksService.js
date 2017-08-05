@@ -3,6 +3,7 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 
 	const ORGS_LIST_KEY = 'orglist';
 	const LAST_ORG_ID_KEY = 'lastOrgId';
+	const LAST_EXPORT_DATE_KEY = 'lastExport';
 
 
 	function getKey(orgId) {
@@ -155,6 +156,25 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 			}
 
 			return deferred.promise;
+		},
+
+		getLastExportDate: function() {
+			var deferred = $q.defer();
+			storageService.load(LAST_EXPORT_DATE_KEY).then(function(lastDateStr) {
+				//console.log('lastDateJson:', lastDateJson);
+				if (lastDateStr) {
+					deferred.resolve(new Date(lastDateStr));
+				} else {
+					deferred.resolve(null);
+				}
+				
+			});
+			return deferred.promise;
+		},
+
+		setLastExportDateAsNow: function() {
+			var now = new Date();
+			storageService.save(LAST_EXPORT_DATE_KEY, now.toString());
 		},
 
 	};

@@ -5,6 +5,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     const BOOKMARK_OPACITY_MAX = 0.6;
     const BOOKMARK_OLDNESS_MAX = 60;
     const BOOKMARK_OPACITY_FACTOR = BOOKMARK_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
+    const LAST_EXPORT_WARNING_LIMIT = 30;
 
     var loadOrgBookmarks = function(orgId) {
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
@@ -25,6 +26,16 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         //console.log('got orgId from service:', orgId);
         $scope.currentOrgId = orgId;
         loadOrgBookmarks(orgId);
+    });
+
+    // check last export date
+    bookmarksService.getLastExportDate().then(function(lastExportDate) {
+        if (lastExportDate) {
+            $scope.daysFromLastExport = utils.daysUntillNow(lastExportDate);
+            $scope.displayLastExportWarning = ($scope.daysFromLastExport > LAST_EXPORT_WARNING_LIMIT);
+        } else {
+            bookmarksService.setLastExportDateAsNow();
+        }
     });
 
     $scope.saveChanges = function() {
@@ -121,6 +132,7 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         bookmarksService.getAllOrgsBookmarks().then(function(allBookmarks) {
             //console.log('allBookmarks:', allBookmarks);
             $scope.bookmarksJson = angular.toJson(allBookmarks);
+            bookmarksService.setLastExportDateAsNow();
         });
     };
 
