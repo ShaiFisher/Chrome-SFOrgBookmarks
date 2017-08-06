@@ -1,0 +1,9 @@
+images/*
+angular.min.js
+bookmarksbar.html
+contentscript.js
+getorg.js
+manifest.json
+sfob.css
+sfob.min.js
+sforgnkmrk.png
