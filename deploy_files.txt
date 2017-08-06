@@ -6,4 +6,5 @@ getorg.js
 manifest.json
 sfob.css
 sfob.min.js
-sforgnkmrk.png
+sfob-16.png
+sfob-128.png
