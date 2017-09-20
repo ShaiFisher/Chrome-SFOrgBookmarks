@@ -5,7 +5,7 @@ span {
 
 .popup-wrap {
 	min-width: 350px;
-	max-width: 400px;
+	max-width: 410px;
 }
 
 h2 {
@@ -62,7 +62,7 @@ h2 {
 .icon-newtab	{	background: url(./images/icon_newtab.png) center center no-repeat;	}
 
 .groups-list {
-	max-height: 400px;
+	max-height: 390px;
 	overflow-y: auto;
 }
 
@@ -104,6 +104,6 @@ ul.bookmarks-list li input {
 	height: 200px;
 }
 
-.settings .message {
+.warning {
 	color: red;
 }

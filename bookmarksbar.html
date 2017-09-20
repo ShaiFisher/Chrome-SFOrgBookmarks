@@ -102,6 +102,7 @@
 		    </div>
 		</div>
 
+		<!-- Settings -->
 	    <div class="settings" ng-show="displaySettings">
 	    	<button ng-click="exportBookmarks()">Export</button>
 	    	<div class="action-bar" style="display: block;">
@@ -119,7 +120,10 @@
 	    	<div class="action-bar" style="display: block;">
 	    		<span class="icon icon-settings" ng-click="displaySettings = true"></span>
 	    	</div>
-	    	<div ng-show="displayLastExportWarning" style="color: red;"> Days from last export: {{daysFromLastExport}}</div>
+	    	<div ng-show="displayLastExportWarning || displaySettings" ng-class="{warning: displayLastExportWarning}">
+	    		 Days from last export: {{daysFromLastExport}} 
+	    		<span ng-show="!displaySettings"> (see Settings)</span>
+	    	</div>
 	    </div>
 	    <!--hr/>
 	    <div>Log:</div>
