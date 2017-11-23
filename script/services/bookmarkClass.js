@@ -26,6 +26,10 @@ sfobApp.factory('Bookmark',['$q', 'utils', 'windowService', function($q, utils, 
 			bookmark.lastUseDate = new Date();
 			windowService.openInNewTab(this.url);
 		};
+
+		bookmarkObj.changeSFInstance = function(oldIns, newIns) {
+			this.url = this.url.replace(oldIns, newIns);
+		};
 		
 		//console.log('new bookmark:', bookmarkObj);
 		return bookmarkObj;

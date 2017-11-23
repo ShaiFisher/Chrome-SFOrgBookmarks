@@ -1,10 +1,12 @@
 //console.log('getorg');
 
-var orgId = window.location.host;
+var orgIdClassic = (typeof SFDCSessionVars != 'undefined') && SFDCSessionVars.oid;
+var orgIdLightning = window.aura && window.aura.storageService && window.aura.storageService.op && window.aura.storageService.op.substring(0,15);
+//console.log('orgIdClassic:', orgIdClassic, ', orgIdLightning:', orgIdLightning);
 
-if (typeof SFDCSessionVars != 'undefined') {
-	orgId = SFDCSessionVars.oid;
+var orgId = orgIdClassic || orgIdLightning;
 
+if (orgId) {
 	// insert data to body element
 	var bodyElem = document.getElementsByTagName('body')[0];
 	bodyElem.setAttribute('org-id', orgId);

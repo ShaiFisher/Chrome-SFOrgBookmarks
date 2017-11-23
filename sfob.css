@@ -107,3 +107,12 @@ ul.bookmarks-list li input {
 .warning {
 	color: red;
 }
+
+.instance-form a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.instance-form input {
+	width: 39%;
+}

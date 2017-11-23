@@ -125,6 +125,29 @@ sfobApp.factory('OrgBookmarks',['$q', 'utils', 'Bookmark', function($q, utils, B
 	    		}
 	    	});
 	    },
+
+	    forEachGroup: function(runFunc) {
+	    	angular.forEach(this.groups, function(group) {
+	    		runFunc(group);
+	    	});
+	    },
+
+	    forEachBookmark: function(runFunc) {
+	    	this.forEachGroup(function(group) {
+	    		//console.log('forEachBookmark: group:', group);
+	    		angular.forEach(group.bookmarks, function(bookmark) {
+	    			//console.log('bookmark:', bookmark);
+	    			runFunc(bookmark);
+	    		});
+	    	})
+	    },
+
+	    changeSFInstance: function(oldIns, newIns) {
+			this.forEachBookmark(function(bookmark) {
+				console.log('bookmark:', bookmark.title);
+				bookmark.changeSFInstance(oldIns, newIns);
+			});
+		},
 	};
 
 	var orgBookmarksObj;

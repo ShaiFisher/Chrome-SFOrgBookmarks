@@ -7,6 +7,8 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     const BOOKMARK_OPACITY_FACTOR = BOOKMARK_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
     const LAST_EXPORT_WARNING_LIMIT = 20;
 
+    $scope.displaySettings = true;
+
     var loadOrgBookmarks = function(orgId) {
         bookmarksService.getBookmarks(orgId).then(function(orgBookmarks) {
             //console.log('popupCtrl: stored orgBookmarks:', orgBookmarks);
@@ -155,7 +157,14 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
                 }
             });
         }
-        
+    };
+
+    $scope.changeSFInstance = function() {
+        if ($scope.oldSFInstance && $scope.newSFInstance) {
+            $scope.orgBookmarks.changeSFInstance($scope.oldSFInstance, $scope.newSFInstance);
+            $scope.saveChanges();
+            alert('Instance has been changed for all bookmarks in this org');
+        }
     };
 
     $scope.$watch('displaySettings', function(newValue, oldValue) {
