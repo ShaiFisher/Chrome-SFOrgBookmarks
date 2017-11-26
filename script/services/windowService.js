@@ -34,6 +34,10 @@ sfobApp.factory('windowService',['$q', 'utils', 'storageService', function($q, u
 			var deferred = $q.defer();
 			this.getActiveTabId().then(function(tabId) {
 				chrome.tabs.sendMessage(tabId, "getOrgId", function(orgId) {
+					if (orgId == 'undefined') {
+						//console.log('windowService got undefined str');
+						orgId = '';
+					}
 	                //console.log('getOrgId response:', orgId);
 	                if (orgId) {
 	                	// store as last org id
