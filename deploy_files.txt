@@ -1,3 +1,6 @@
+1. Update version in manifest.json, bookmarksbar.html
+2. Minify js files in bookmarksbar.html into sfob.min.js
+3. Zip files:
 images/*
 angular.min.js
 bookmarksbar.html
@@ -8,3 +11,4 @@ sfob.css
 sfob.min.js
 sfob-16.png
 sfob-128.png
+4. Upload zip file to Chrome store

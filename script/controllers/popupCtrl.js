@@ -58,13 +58,11 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
             //utils.log('current tab:', tab);
 
             // remove salesforce title suffix
-            var i = tab.title.indexOf(' ~ ');
-            var title = (i > 0 ? tab.title.substring(0, i) : tab.title);
-
-            i = title.indexOf(' | ');
-            if (i > -1) {
-                title = title.substring(i + 3);
+            let i = tab.title.indexOf(' ~ ');
+            if (i < 0) {
+                i = tab.title.indexOf(' | ');
             }
+            const title = (i > 0 ? tab.title.substring(0, i) : tab.title);
 
             $scope.orgBookmarks.addBookmark(title, tab.url, group);
             $scope.saveChanges();
