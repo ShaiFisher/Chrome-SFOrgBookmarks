@@ -3,8 +3,11 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
                             function($scope, bookmarksService, windowService, utils, OrgBookmarks, $timeout) {
 
     const BOOKMARK_OPACITY_MAX = 0.6;
+    const BOOKMARK_OPACITY_MIN = 0.4;
     const BOOKMARK_OLDNESS_MAX = 60;
     const BOOKMARK_OPACITY_FACTOR = BOOKMARK_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
+    const ORG_OLDNESS_MAX = 360;
+    const ORG_OPACITY_FACTOR = ORG_OLDNESS_MAX / BOOKMARK_OPACITY_MAX;
     const LAST_EXPORT_WARNING_LIMIT = 20;
 
     $scope.displaySettings = true;
@@ -106,11 +109,16 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         
     };
 
-    function setOpacity(bookmark) {
+    function setOpacity(bookmark, maxOldness, factor) {
         //console.log('lastUseDate:', bookmark.lastUseDate, bookmark);
-        var dayswithoutUse = Math.min(utils.daysUntillNow(bookmark.lastUseDate), BOOKMARK_OLDNESS_MAX);
-        bookmark.opacity = 1 - dayswithoutUse / BOOKMARK_OPACITY_FACTOR;
-        //console.log('opacity:', dayswithoutUse, '/', BOOKMARK_OPACITY_FACTOR, '=', bookmark.opacity);
+        if (bookmark.lastUseDate) {
+            var dayswithoutUse = Math.min(utils.daysUntillNow(bookmark.lastUseDate), (maxOldness || BOOKMARK_OLDNESS_MAX));
+            //dayswithoutUse = utils.daysUntillNow(bookmark.lastUseDate);
+            bookmark.dayswithoutUse = dayswithoutUse;
+            bookmark.opacity = 1 - dayswithoutUse / (factor || BOOKMARK_OPACITY_FACTOR);
+        } else {
+            bookmark.opacity = 1 - BOOKMARK_OPACITY_MAX;
+        }
     };
 
 
@@ -127,6 +135,44 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         $scope.saveChanges();
     };
 
+    //----------------- orgs list ---------------------
+
+    $scope.showOrgsList = function() {
+        bookmarksService.getAllOrgsBookmarks().then(function(allBookmarks) {
+            $scope.orgsList = Object.values(allBookmarks).map(org => ({
+                orgId: org.orgId,
+                name: org.name,
+                lastUseDate: bookmarksService.getLastUseDate(org),
+                groups: org.groups
+            }));
+            $scope.orgsList.forEach(org => {
+                setOpacity(org, ORG_OLDNESS_MAX, ORG_OPACITY_FACTOR);
+                org.lastUseDateStr = org.lastUseDate ? org.lastUseDate.toLocaleDateString() : "?";
+            });
+            $scope.displayOrgsList = true;
+        });
+    };
+
+    $scope.selectOrg = function(org) {
+        $scope.currentOrgId = org.orgId;
+        loadOrgBookmarks(org.orgId);
+        $scope.displayOrgsList = false;
+    }
+
+    $scope.deleteOrg = function(orgToDel) {
+        if (confirm("Are you sure you want do delete " + orgToDel.name + "?")) {
+            bookmarksService.removeOrg(orgToDel.orgId);
+            $scope.orgsList = $scope.orgsList.filter(org => org.orgId !== orgToDel.orgId);
+        }
+    }
+
+    $scope.sortOrgsByName = function() {
+        $scope.orgsList.sort((a, b) => (a.name || "").localeCompare(b.name));
+    }
+
+    $scope.sortOrgsByDate = function() {
+        $scope.orgsList.sort((a, b) => (b.lastUseDate?.toISOString() || "").localeCompare(a.lastUseDate?.toISOString() || ""));
+    }
 
     //----------------- Settings methods ---------------------
 

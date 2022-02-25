@@ -3,7 +3,7 @@
 
   "name": "Salesforce Org Bookmarks",
   "description": "Displays bookmarks related to current Salesforce org",
-  "version": "1.3.3",
+  "version": "1.3.4",
 
   "browser_action": {
    "default_icon": "sfob-16.png",
@@ -22,7 +22,6 @@
     }
   ],
   "permissions": [
-    "activeTab",
     "storage",
     "tabs"
    ],

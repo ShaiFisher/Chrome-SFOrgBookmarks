@@ -29,6 +29,10 @@ sfobApp.factory('storageService',['$q', 'utils', function($q, utils) {
 			return deferred.promise;
 		},
 
+		remove: function(key) {
+			chrome.storage.sync.remove([key]);
+		},
+
 		saveMultiple: function(dataMap) {
 			//console.log('saveMultiple:', dataMap);
 			var deferred = $q.defer();

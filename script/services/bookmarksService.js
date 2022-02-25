@@ -66,10 +66,7 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		getAllOrgsKeys: function() {
 			var deferred = $q.defer();
 			this.getAllOrgsIds().then(function(orgsList) {
-				var orgsKeys = [];
-				angular.forEach(orgsList, function(orgId) {
-					orgsKeys.push(getKey(orgId));
-				});
+				var orgsKeys = orgsList.map(orgId => getKey(orgId));
 				deferred.resolve(orgsKeys);
 			});
 			return deferred.promise;
@@ -96,6 +93,30 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 			});
 
 			return deferred.promise;
+		},
+
+		getLastUseDate: function(org) {
+			let lastUseDate;
+			org.groups.forEach(group => {
+				group.bookmarks.forEach(bookmark => {
+					if (bookmark.lastUseDate && (!lastUseDate || bookmark.lastExportDate > lastUseDate)) {
+						const d = new Date(bookmark.lastUseDate);
+						if (d instanceof Date && !isNaN(d)) {
+							lastUseDate = d;
+						}
+					}
+				})
+			});
+			return lastUseDate;
+		},
+
+		removeOrg: function(orgId) {
+			const orgKey = getKey(orgId);	// e.g. "orgInfo_00D0q0000001hHH"
+			storageService.remove(orgKey);
+			this.getAllOrgsIds().then(function(orgIds) {
+				orgIds = orgIds.filter(id => id !== orgId);
+				storageService.save(ORGS_LIST_KEY, orgIds);
+			});
 		},
 
 		removeAllOrgs: function() {
