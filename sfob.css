@@ -77,8 +77,9 @@ h2 {
 .icon-settings 	{	background: url(./images/icon_settings.png) center center no-repeat;}
 .icon-back 		{	background: url(./images/icon_back.png) center center no-repeat;	}
 .icon-newtab	{	background: url(./images/icon_newtab.png) center center no-repeat;	}
-.icon-list		{	background: url(./images/icon_list.png) center center no-repeat; width: 24px; height: 24px;	}
-.icon-sort-date {	background: url(./images/icon_sort_date.png) center center no-repeat;	}
+.icon-copy		{	background: url(./images/icon_copy.png) center center no-repeat;	}
+.icon-list		{	background: url(./images/icon_list.png) center/100% no-repeat; width: 24px; height: 24px;	}
+.icon-sort-date {	background: url(./images/icon_sort_date.png) center/100% no-repeat;	}
 .icon-sort-name {	background: url(./images/icon_sort_name.png) center/100% no-repeat; 	}
 
 .groups-list {
@@ -111,6 +112,10 @@ ul.bookmarks-list li input {
 	width: 250px;
 }
 
+.org-actions {
+	padding-top: 10px;
+}
+
 .footer {
 	border-top: 1px gray solid;
     padding-top: 5px;
@@ -141,7 +146,9 @@ ul.bookmarks-list li input {
 	width: 39%;
 }
 
-.orgs-list-wrap {
+.orgs-list-wrap .orgs-list-action-bar .icon {
+	position: relative;
+	top: 5px;
 }
 
 .orgs-list-wrap .orgs-list-action-bar {

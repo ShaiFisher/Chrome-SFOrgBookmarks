@@ -1,5 +1,5 @@
 1. Update version in manifest.json, bookmarksbar.html
-2. Minify js files in bookmarksbar.html into sfob.min.js
+2. Minify js files in bookmarksbar.html into sfob.min.js (https://jscompress.com/)
 3. Zip files:
 images/*
 angular.min.js

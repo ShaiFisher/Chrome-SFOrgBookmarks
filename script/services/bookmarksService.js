@@ -98,14 +98,16 @@ sfobApp.factory('bookmarksService',['$q', 'utils', 'OrgBookmarks', 'storageServi
 		getLastUseDate: function(org) {
 			let lastUseDate;
 			org.groups.forEach(group => {
-				group.bookmarks.forEach(bookmark => {
-					if (bookmark.lastUseDate && (!lastUseDate || bookmark.lastExportDate > lastUseDate)) {
-						const d = new Date(bookmark.lastUseDate);
-						if (d instanceof Date && !isNaN(d)) {
-							lastUseDate = d;
+				if (group && group.bookmarks) {
+					group.bookmarks.forEach(bookmark => {
+						if (bookmark.lastUseDate && (!lastUseDate || bookmark.lastExportDate > lastUseDate)) {
+							const d = new Date(bookmark.lastUseDate);
+							if (d instanceof Date && !isNaN(d)) {
+								lastUseDate = d;
+							}
 						}
-					}
-				})
+					});
+				}
 			});
 			return lastUseDate;
 		},

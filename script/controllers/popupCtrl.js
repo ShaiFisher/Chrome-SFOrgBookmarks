@@ -50,8 +50,10 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     };
 
     $scope.deleteAllBookmarks = function() {
-        $scope.orgBookmarks.groups = [];
-        $scope.saveChanges();
+        if (confirm("Are you sure you want to delete all bookmarks for \"" + $scope.orgBookmarks.name + "\"?")) {
+            $scope.orgBookmarks.groups = [];
+            $scope.saveChanges();
+        }
     };
 
     //--------------- Bookmarks methods ----------------------
@@ -108,6 +110,12 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
         }, 500);
         
     };
+
+    $scope.copyText = function(text) {
+        if (navigator && navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+        }
+    }
 
     function setOpacity(bookmark, maxOldness, factor) {
         //console.log('lastUseDate:', bookmark.lastUseDate, bookmark);
@@ -175,6 +183,11 @@ sfobApp.controller('popupCtrl', ['$scope', 'bookmarksService', 'windowService', 
     }
 
     //----------------- Settings methods ---------------------
+
+    $scope.toggleDisplaySettings = function() {
+        $scope.displaySettings = true;
+        $scope.displayOrgsList = false;
+    };
 
     $scope.exportBookmarks = function() {
         bookmarksService.getAllOrgsBookmarks().then(function(allBookmarks) {
